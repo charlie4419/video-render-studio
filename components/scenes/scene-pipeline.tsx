@@ -206,8 +206,10 @@ export function ScenePipeline({
           {selectedImage && (() => {
             const url = resolveUrl(selectedImage.imageUrl);
             return url ? (
-              <div className="mt-3 relative w-full aspect-[9/16] max-w-[140px] rounded-lg overflow-hidden border">
-                <Image src={url} alt="씬이미지" fill className="object-cover" unoptimized />
+              <div className="flex justify-center">
+                <div className="relative w-[120px] aspect-[9/16] rounded-lg overflow-hidden border">
+                  <Image src={url} alt="씬이미지" fill className="object-cover" unoptimized />
+                </div>
               </div>
             ) : null;
           })()}
@@ -221,7 +223,7 @@ export function ScenePipeline({
           onAction={onGenerateTts}
         >
           {selectedVoice?.audioUrl && (
-            <div className="mt-3 space-y-1">
+            <div className="w-full flex flex-col items-center gap-1">
               <audio controls src={resolveUrl(selectedVoice.audioUrl) ?? ''} className="w-full h-8" />
               {selectedVoice.duration && (
                 <p className="text-xs text-muted-foreground">{Number(selectedVoice.duration).toFixed(1)}초</p>
@@ -258,8 +260,10 @@ export function ScenePipeline({
           {selectedClip?.videoUrl && (() => {
             const url = resolveUrl(selectedClip.videoUrl);
             return url ? (
-              <div className="mt-3">
-                <video src={url} controls className="w-full max-w-[140px] rounded-lg border" />
+              <div className="flex justify-center">
+                <div className="w-[120px] aspect-[9/16] rounded-lg overflow-hidden border bg-black">
+                  <video src={url} controls className="w-full h-full object-contain" />
+                </div>
               </div>
             ) : null;
           })()}
@@ -276,8 +280,10 @@ export function ScenePipeline({
           {videoClips[0] && (() => {
             const url = resolveUrl(videoClips[0].videoUrl);
             return url ? (
-              <div className="mt-3 space-y-1">
-                <video src={url} controls className="w-full max-w-[140px] rounded-lg border" />
+              <div className="flex flex-col items-center gap-1">
+                <div className="w-[120px] aspect-[9/16] rounded-lg overflow-hidden border bg-black">
+                  <video src={url} controls className="w-full h-full object-contain" />
+                </div>
                 {videoClips[0].duration && (
                   <p className="text-xs text-muted-foreground">{Number(videoClips[0].duration).toFixed(1)}초</p>
                 )}
@@ -306,7 +312,7 @@ function StepCard({
   const isFailed  = job?.status === 'FAILED';
 
   return (
-    <div className={`rounded-xl border p-4 bg-background transition-colors ${done ? 'border-green-200/70' : 'border-border'}`}>
+    <div className={`rounded-xl border p-4 bg-background transition-colors flex flex-col ${done ? 'border-green-200/70' : 'border-border'}`}>
       {/* 헤더 */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
@@ -352,7 +358,9 @@ function StepCard({
       )}
 
       {/* 미디어 */}
-      {children}
+      <div className="flex-1 flex items-center justify-center">
+        {children}
+      </div>
     </div>
   );
 }

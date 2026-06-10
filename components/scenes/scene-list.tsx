@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ImageIcon, Mic, Video, Film, RefreshCw, ChevronDown, ChevronUp, Pencil } from 'lucide-react';
+import { ImageIcon, Mic, Video, Film, RefreshCw, ChevronDown, ChevronUp, Pencil, Trash2, Plus, ArrowUp, ArrowDown } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -12,6 +12,9 @@ import {
   useGenerateTts,
   useGenerateAnimation,
   useRenderClip,
+  useCreateScene,
+  useDeleteScene,
+  useReorderScenes,
 } from '@/lib/api/hooks';
 import type { Scene } from '@/lib/api/types';
 
@@ -39,12 +42,15 @@ export function SceneList({ episodeId }: Props) {
   const [editing, setEditing] = useState<string | null>(null);
 
   const { data, isLoading, refetch } = useSceneList(episodeId);
-  const scenes = (data as unknown as Scene[]) ?? [];
+  const scenes = ((data as any) ?? []) as Scene[];
 
   const imageMutation    = useGenerateSceneImage();
   const ttsMutation      = useGenerateTts();
   const animateMutation  = useGenerateAnimation();
   const renderMutation   = useRenderClip();
+  const createMutation   = useCreateScene(episodeId);
+  const deleteMutation   = useDeleteScene(episodeId);
+  const reorderMutation  = useReorderScenes(episodeId);
 
   const isBusy = (sceneId: string, type: string) => {
     if (type === 'image')   return imageMutation.isPending   && (imageMutation.variables   as any)?.sceneId === sceneId;
@@ -82,21 +88,33 @@ export function SceneList({ episodeId }: Props) {
     } catch (e: any) { toast.error(e?.response?.data?.message ?? '렌더링 실패'); }
   };
 
+  const handleAddScene = async () => {
+    try {
+      await createMutation.mutateAsync({});
+      toast.success('씬이 추가됐어요');
+    } catch (e: any) { toast.error(e?.response?.data?.message ?? '씬 추가 실패'); }
+  };
+
+  const handleDelete = async (sceneId: string) => {
+    if (!confirm('이 씬을 삭제할까요? 이미지, TTS, 영상 데이터가 모두 삭제됩니다.')) return;
+    try {
+      await deleteMutation.mutateAsync(sceneId);
+      toast.success('씬 삭제됐어요');
+    } catch (e: any) { toast.error(e?.response?.data?.message ?? '씬 삭제 실패'); }
+  };
+
+  const handleMove = async (index: number, direction: 'up' | 'down') => {
+    const newScenes = [...scenes];
+    const swapWith = direction === 'up' ? index - 1 : index + 1;
+    [newScenes[index], newScenes[swapWith]] = [newScenes[swapWith], newScenes[index]];
+    try {
+      await reorderMutation.mutateAsync(newScenes.map(s => s.id));
+    } catch (e: any) { toast.error(e?.response?.data?.message ?? '순서 변경 실패'); }
+  };
+
   if (isLoading) return (
     <div className="space-y-2">
       {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-16 rounded-xl" />)}
-    </div>
-  );
-
-  if (scenes.length === 0) return (
-    <div className="flex flex-col items-center justify-center py-24 text-muted-foreground gap-4">
-      <div className="h-16 w-16 rounded-2xl bg-muted flex items-center justify-center">
-        <Film className="h-8 w-8 opacity-40" />
-      </div>
-      <div className="text-center">
-        <p className="font-medium">씬이 없어요</p>
-        <p className="text-sm mt-1 opacity-70">대본 탭에서 대본을 먼저 생성하세요</p>
-      </div>
     </div>
   );
 
@@ -104,12 +122,35 @@ export function SceneList({ episodeId }: Props) {
     <div className="space-y-2">
       <div className="flex items-center justify-between mb-1">
         <span className="text-sm text-muted-foreground">{scenes.length}개 씬</span>
-        <Button variant="ghost" size="sm" className="gap-1.5 h-8 text-xs text-muted-foreground" onClick={() => refetch()}>
-          <RefreshCw className="h-3 w-3" /> 새로고침
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="sm" className="gap-1.5 h-8 text-xs text-muted-foreground" onClick={() => refetch()}>
+            <RefreshCw className="h-3 w-3" /> 새로고침
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-1.5 h-8 text-xs"
+            onClick={handleAddScene}
+            disabled={createMutation.isPending}
+          >
+            <Plus className="h-3 w-3" /> 씬 추가
+          </Button>
+        </div>
       </div>
 
-      {scenes.map((scene) => {
+      {scenes.length === 0 && (
+        <div className="flex flex-col items-center justify-center py-24 text-muted-foreground gap-4">
+          <div className="h-16 w-16 rounded-2xl bg-muted flex items-center justify-center">
+            <Film className="h-8 w-8 opacity-40" />
+          </div>
+          <div className="text-center">
+            <p className="font-medium">씬이 없어요</p>
+            <p className="text-sm mt-1 opacity-70">대본 탭에서 대본을 생성하거나 직접 추가하세요</p>
+          </div>
+        </div>
+      )}
+
+      {scenes.map((scene, idx) => {
         const isOpen = expanded === scene.id;
         const dialogue = scene.dialogueJson
           ? (() => { try { return JSON.parse(scene.dialogueJson); } catch { return []; } })()
@@ -164,6 +205,26 @@ export function SceneList({ episodeId }: Props) {
                 )}
               </div>
 
+              {/* 순서 변경 버튼 */}
+              <div className="flex flex-col gap-0.5 shrink-0" onClick={(e) => e.stopPropagation()}>
+                <button
+                  className="p-0.5 rounded hover:bg-muted transition-colors disabled:opacity-30"
+                  title="위로"
+                  disabled={idx === 0 || reorderMutation.isPending}
+                  onClick={() => handleMove(idx, 'up')}
+                >
+                  <ArrowUp className="h-3 w-3 text-muted-foreground" />
+                </button>
+                <button
+                  className="p-0.5 rounded hover:bg-muted transition-colors disabled:opacity-30"
+                  title="아래로"
+                  disabled={idx === scenes.length - 1 || reorderMutation.isPending}
+                  onClick={() => handleMove(idx, 'down')}
+                >
+                  <ArrowDown className="h-3 w-3 text-muted-foreground" />
+                </button>
+              </div>
+
               {/* 편집 버튼 */}
               <button
                 className="p-1.5 rounded-md hover:bg-muted transition-colors shrink-0"
@@ -175,6 +236,19 @@ export function SceneList({ episodeId }: Props) {
                 }}
               >
                 <Pencil className="h-3.5 w-3.5 text-muted-foreground" />
+              </button>
+
+              {/* 삭제 버튼 */}
+              <button
+                className="p-1.5 rounded-md hover:bg-red-50 hover:text-red-500 transition-colors shrink-0"
+                title="씬 삭제"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete(scene.id);
+                }}
+                disabled={deleteMutation.isPending}
+              >
+                <Trash2 className="h-3.5 w-3.5 text-muted-foreground" />
               </button>
 
               {/* 토글 */}

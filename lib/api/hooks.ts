@@ -204,6 +204,33 @@ export const useRenderClip = () => {
   });
 };
 
+export const useCreateScene = (episodeId: string) => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (dto: Record<string, unknown> = {}) =>
+      axiosInstance({ url: `/api/v1/episodes/${episodeId}/scenes`, method: 'POST', data: dto }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: QK.scenes(episodeId) }),
+  });
+};
+
+export const useDeleteScene = (episodeId: string) => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (sceneId: string) =>
+      axiosInstance({ url: `/api/v1/scenes/${sceneId}`, method: 'DELETE' }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: QK.scenes(episodeId) }),
+  });
+};
+
+export const useReorderScenes = (episodeId: string) => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (sceneIds: string[]) =>
+      axiosInstance({ url: `/api/v1/episodes/${episodeId}/scenes/reorder`, method: 'PATCH', data: { sceneIds } }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: QK.scenes(episodeId) }),
+  });
+};
+
 export const useSelectImage = (sceneId: string) => {
   const qc = useQueryClient();
   return useMutation({
