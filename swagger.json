@@ -1,0 +1,1696 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/v1/series": {
+      "get": {
+        "operationId": "SeriesController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "시리즈 목록 조회",
+        "tags": [
+          "Series"
+        ]
+      },
+      "post": {
+        "operationId": "SeriesController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSeriesDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "시리즈 생성",
+        "tags": [
+          "Series"
+        ]
+      }
+    },
+    "/api/v1/series/{id}": {
+      "get": {
+        "operationId": "SeriesController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "시리즈 상세 조회",
+        "tags": [
+          "Series"
+        ]
+      },
+      "patch": {
+        "operationId": "SeriesController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSeriesDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "시리즈 수정",
+        "tags": [
+          "Series"
+        ]
+      },
+      "delete": {
+        "operationId": "SeriesController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "summary": "시리즈 삭제",
+        "tags": [
+          "Series"
+        ]
+      }
+    },
+    "/api/v1/series/{seriesId}/episodes": {
+      "get": {
+        "operationId": "EpisodesController_findBySeries",
+        "parameters": [
+          {
+            "name": "seriesId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "시리즈의 에피소드 목록",
+        "tags": [
+          "Episodes"
+        ]
+      },
+      "post": {
+        "operationId": "EpisodesController_create",
+        "parameters": [
+          {
+            "name": "seriesId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEpisodeDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "에피소드 생성",
+        "tags": [
+          "Episodes"
+        ]
+      }
+    },
+    "/api/v1/episodes/{id}": {
+      "get": {
+        "operationId": "EpisodesController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "에피소드 상세 조회",
+        "tags": [
+          "Episodes"
+        ]
+      },
+      "patch": {
+        "operationId": "EpisodesController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateEpisodeDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "에피소드 수정",
+        "tags": [
+          "Episodes"
+        ]
+      },
+      "delete": {
+        "operationId": "EpisodesController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "summary": "에피소드 삭제",
+        "tags": [
+          "Episodes"
+        ]
+      }
+    },
+    "/api/v1/episodes/{episodeId}/scripts": {
+      "get": {
+        "operationId": "ScriptsController_findByEpisode",
+        "parameters": [
+          {
+            "name": "episodeId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "에피소드의 대본 목록",
+        "tags": [
+          "Scripts"
+        ]
+      }
+    },
+    "/api/v1/scripts/{id}": {
+      "get": {
+        "operationId": "ScriptsController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "대본 상세 조회",
+        "tags": [
+          "Scripts"
+        ]
+      },
+      "patch": {
+        "operationId": "ScriptsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateScriptDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "대본 수정 / 승인",
+        "tags": [
+          "Scripts"
+        ]
+      }
+    },
+    "/api/v1/episodes/{episodeId}/scripts/generate": {
+      "post": {
+        "operationId": "ScriptsController_generateScript",
+        "parameters": [
+          {
+            "name": "episodeId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateScriptDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "GPT 대본 자동 생성 (STEP 1)",
+        "tags": [
+          "Scripts"
+        ]
+      }
+    },
+    "/api/v1/scripts/{id}/scenes/generate": {
+      "post": {
+        "operationId": "ScriptsController_generateScenes",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "씬 재분할 — 대본 수정 후 씬을 다시 생성할 때 사용",
+        "tags": [
+          "Scripts"
+        ]
+      }
+    },
+    "/api/v1/episodes/{episodeId}/scenes": {
+      "get": {
+        "operationId": "ScenesController_findByEpisode",
+        "parameters": [
+          {
+            "name": "episodeId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "에피소드의 씬 목록",
+        "tags": [
+          "Scenes"
+        ]
+      }
+    },
+    "/api/v1/scenes/{id}": {
+      "get": {
+        "operationId": "ScenesController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "씬 상세 조회",
+        "tags": [
+          "Scenes"
+        ]
+      },
+      "patch": {
+        "operationId": "ScenesController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSceneDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "씬 수정",
+        "tags": [
+          "Scenes"
+        ]
+      }
+    },
+    "/api/v1/scenes/{id}/images/generate": {
+      "post": {
+        "operationId": "ScenesController_generateImage",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateSceneImageDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "씬 이미지 생성 (STEP 4)",
+        "tags": [
+          "Scenes"
+        ]
+      }
+    },
+    "/api/v1/scenes/{id}/images": {
+      "get": {
+        "operationId": "ScenesController_findImages",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "씬 이미지 목록",
+        "tags": [
+          "Scenes"
+        ]
+      }
+    },
+    "/api/v1/scenes/{sceneId}/images/{imageId}/select": {
+      "put": {
+        "operationId": "ScenesController_selectImage",
+        "parameters": [
+          {
+            "name": "sceneId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "imageId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "씬 이미지 선택 (승인)",
+        "tags": [
+          "Scenes"
+        ]
+      }
+    },
+    "/api/v1/scenes/{id}/tts/generate": {
+      "post": {
+        "operationId": "ScenesController_generateTts",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateTtsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "TTS 음성 생성 (STEP 5)",
+        "tags": [
+          "Scenes"
+        ]
+      }
+    },
+    "/api/v1/scenes/{id}/tts": {
+      "get": {
+        "operationId": "ScenesController_findVoices",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "씬 TTS 목록",
+        "tags": [
+          "Scenes"
+        ]
+      }
+    },
+    "/api/v1/scenes/{id}/animate": {
+      "post": {
+        "operationId": "ScenesController_generateImageToVideo",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageToVideoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "AI 이미지→영상 변환 (STEP 5.5 - Kling)",
+        "tags": [
+          "Scenes"
+        ]
+      }
+    },
+    "/api/v1/scenes/{id}/animated-clips": {
+      "get": {
+        "operationId": "ScenesController_findAnimatedClips",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "AI 생성 영상 클립 목록",
+        "tags": [
+          "Scenes"
+        ]
+      }
+    },
+    "/api/v1/scenes/{id}/render": {
+      "post": {
+        "operationId": "ScenesController_renderClip",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RenderClipDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "씬 클립 렌더링 (STEP 6)",
+        "tags": [
+          "Scenes"
+        ]
+      }
+    },
+    "/api/v1/series/{seriesId}/characters": {
+      "get": {
+        "operationId": "CharactersController_findBySeries",
+        "parameters": [
+          {
+            "name": "seriesId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "시리즈의 캐릭터 목록",
+        "tags": [
+          "Characters"
+        ]
+      },
+      "post": {
+        "operationId": "CharactersController_create",
+        "parameters": [
+          {
+            "name": "seriesId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCharacterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "캐릭터 생성 (STEP 3)",
+        "tags": [
+          "Characters"
+        ]
+      }
+    },
+    "/api/v1/characters/{id}": {
+      "get": {
+        "operationId": "CharactersController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "캐릭터 상세 조회",
+        "tags": [
+          "Characters"
+        ]
+      },
+      "patch": {
+        "operationId": "CharactersController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCharacterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "캐릭터 수정",
+        "tags": [
+          "Characters"
+        ]
+      },
+      "delete": {
+        "operationId": "CharactersController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "summary": "캐릭터 삭제",
+        "tags": [
+          "Characters"
+        ]
+      }
+    },
+    "/api/v1/characters/{id}/references": {
+      "get": {
+        "operationId": "CharactersController_findReferences",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "캐릭터 레퍼런스 이미지 목록",
+        "tags": [
+          "Characters"
+        ]
+      },
+      "post": {
+        "operationId": "CharactersController_addReference",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCharacterReferenceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "캐릭터 레퍼런스 이미지 추가",
+        "tags": [
+          "Characters"
+        ]
+      }
+    },
+    "/api/v1/characters/{characterId}/references/{referenceId}": {
+      "delete": {
+        "operationId": "CharactersController_removeReference",
+        "parameters": [
+          {
+            "name": "characterId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "referenceId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "summary": "캐릭터 레퍼런스 삭제",
+        "tags": [
+          "Characters"
+        ]
+      }
+    },
+    "/api/v1/characters/{id}/images/generate": {
+      "post": {
+        "operationId": "CharactersController_generateImages",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "캐릭터 레퍼런스 이미지 생성 (정면·우측·좌측·후면·전신 5장)",
+        "tags": [
+          "Characters"
+        ]
+      }
+    },
+    "/api/v1/assets": {
+      "get": {
+        "operationId": "AssetsController_findAll",
+        "parameters": [
+          {
+            "name": "type",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "BGM",
+                "SFX",
+                "BACKGROUND",
+                "OVERLAY",
+                "FONT"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "에셋 목록",
+        "tags": [
+          "Assets"
+        ]
+      },
+      "post": {
+        "operationId": "AssetsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAssetDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "에셋 등록",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/api/v1/assets/{id}": {
+      "get": {
+        "operationId": "AssetsController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "에셋 상세",
+        "tags": [
+          "Assets"
+        ]
+      },
+      "delete": {
+        "operationId": "AssetsController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "summary": "에셋 삭제",
+        "tags": [
+          "Assets"
+        ]
+      }
+    },
+    "/api/v1/jobs": {
+      "get": {
+        "operationId": "JobsController_findAll",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "잡 목록 조회",
+        "tags": [
+          "Jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/queue-stats": {
+      "get": {
+        "operationId": "JobsController_getQueueStats",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "BullMQ 큐 상태 조회",
+        "tags": [
+          "Jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/{id}": {
+      "get": {
+        "operationId": "JobsController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "잡 상세 조회",
+        "tags": [
+          "Jobs"
+        ]
+      },
+      "delete": {
+        "operationId": "JobsController_cancel",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "잡 취소",
+        "tags": [
+          "Jobs"
+        ]
+      }
+    },
+    "/api/v1/jobs/{id}/stream": {
+      "get": {
+        "operationId": "JobsController_streamJob",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "잡 실시간 상태 스트림 (SSE)",
+        "tags": [
+          "Jobs"
+        ]
+      }
+    },
+    "/api/v1/episodes/{episodeId}/videos": {
+      "get": {
+        "operationId": "VideosController_findByEpisode",
+        "parameters": [
+          {
+            "name": "episodeId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "에피소드의 최종 영상 목록",
+        "tags": [
+          "Videos"
+        ]
+      }
+    },
+    "/api/v1/videos/{id}": {
+      "get": {
+        "operationId": "VideosController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "최종 영상 상세",
+        "tags": [
+          "Videos"
+        ]
+      },
+      "delete": {
+        "operationId": "VideosController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "summary": "최종 영상 삭제",
+        "tags": [
+          "Videos"
+        ]
+      }
+    },
+    "/api/v1/episodes/{episodeId}/render": {
+      "post": {
+        "operationId": "VideosController_renderFinal",
+        "parameters": [
+          {
+            "name": "episodeId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "resolution",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "1920x1080",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "최종 영상 렌더링 시작 (STEP 7)",
+        "tags": [
+          "Videos"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Video Render API",
+    "description": "AI Animation Studio API",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "CreateSeriesDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "에반맨"
+          },
+          "description": {
+            "type": "string",
+            "example": "슈퍼히어로 이반의 모험"
+          },
+          "stylePrompt": {
+            "type": "string",
+            "example": "anime style, vibrant colors, action"
+          },
+          "thumbnail": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ]
+      },
+      "UpdateSeriesDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "에반맨"
+          },
+          "description": {
+            "type": "string",
+            "example": "슈퍼히어로 이반의 모험"
+          },
+          "stylePrompt": {
+            "type": "string",
+            "example": "anime style, vibrant colors, action"
+          },
+          "thumbnail": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateEpisodeDto": {
+        "type": "object",
+        "properties": {
+          "episodeNumber": {
+            "type": "number",
+            "example": 1
+          },
+          "title": {
+            "type": "string",
+            "example": "첫 번째 모험"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "episodeNumber",
+          "title"
+        ]
+      },
+      "UpdateEpisodeDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "SCRIPT_READY",
+              "SCENE_READY",
+              "VOICE_READY",
+              "RENDERING",
+              "COMPLETED",
+              "FAILED"
+            ]
+          },
+          "thumbnail": {
+            "type": "string"
+          }
+        }
+      },
+      "GenerateScriptDto": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "추가 지시사항 (선택)"
+          }
+        }
+      },
+      "UpdateScriptDto": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "GENERATING",
+              "READY",
+              "APPROVED",
+              "FAILED"
+            ]
+          }
+        }
+      },
+      "UpdateSceneDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "narration": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "number"
+          },
+          "emotion": {
+            "type": "string"
+          },
+          "background": {
+            "type": "string"
+          },
+          "cameraDirection": {
+            "type": "string"
+          },
+          "dialogueJson": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "IMAGE_GENERATING",
+              "IMAGE_READY",
+              "VOICE_GENERATING",
+              "VOICE_READY",
+              "RENDERING",
+              "COMPLETED",
+              "FAILED"
+            ]
+          }
+        }
+      },
+      "GenerateSceneImageDto": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "추가 이미지 프롬프트"
+          },
+          "negativePrompt": {
+            "type": "string"
+          },
+          "style": {
+            "type": "string",
+            "example": "anime, cinematic"
+          },
+          "width": {
+            "type": "number",
+            "example": 1920
+          },
+          "height": {
+            "type": "number",
+            "example": 1080
+          }
+        }
+      },
+      "GenerateTtsDto": {
+        "type": "object",
+        "properties": {
+          "voiceId": {
+            "type": "string",
+            "description": "사용할 음성 ID (OpenAI voice name)"
+          },
+          "characterId": {
+            "type": "string",
+            "description": "특정 캐릭터 ID"
+          },
+          "speed": {
+            "type": "number",
+            "description": "재생 속도",
+            "example": 1
+          }
+        }
+      },
+      "ImageToVideoDto": {
+        "type": "object",
+        "properties": {
+          "motionPrompt": {
+            "type": "string",
+            "description": "움직임 묘사 프롬프트 (예: \"캐릭터가 손짓하며 설명하는 동작\")",
+            "example": "character explaining with gentle hand gestures"
+          },
+          "duration": {
+            "type": "number",
+            "enum": [
+              5,
+              10
+            ],
+            "description": "생성 영상 길이(초)",
+            "example": 5
+          },
+          "aspectRatio": {
+            "type": "string",
+            "enum": [
+              "16:9",
+              "9:16",
+              "1:1"
+            ],
+            "description": "화면 비율 (쇼츠: 9:16)",
+            "example": "9:16"
+          }
+        }
+      },
+      "RenderClipDto": {
+        "type": "object",
+        "properties": {
+          "motionEffect": {
+            "type": "string",
+            "enum": [
+              "zoom_in",
+              "zoom_out",
+              "pan_right",
+              "pan_left",
+              "ken_burns",
+              "none",
+              "shake",
+              "flash",
+              "impact_zoom",
+              "speed_pan",
+              "strobe"
+            ],
+            "description": "모션 효과 (zoom_in/zoom_out/pan_right/pan_left/ken_burns/none/shake/flash/impact_zoom/speed_pan/strobe)",
+            "example": "impact_zoom"
+          }
+        }
+      },
+      "CreateCharacterDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "에반"
+          },
+          "description": {
+            "type": "string"
+          },
+          "age": {
+            "type": "number",
+            "example": 17
+          },
+          "gender": {
+            "type": "string",
+            "example": "남성"
+          },
+          "personality": {
+            "type": "string"
+          },
+          "basePrompt": {
+            "type": "string",
+            "description": "이미지 생성용 기본 프롬프트"
+          },
+          "voiceType": {
+            "type": "string",
+            "description": "음성 타입 (OpenAI voice ID: alloy, ash, coral, echo, fable, nova, onyx, sage, shimmer)"
+          },
+          "elevenLabsVoiceType": {
+            "type": "string",
+            "description": "ElevenLabs 음성 타입 (adam, arnold, antoni, elli, domi, rachel, bella, josh, sam)",
+            "example": "rachel"
+          },
+          "typecastVoiceType": {
+            "type": "string",
+            "description": "Typecast actor_id (Typecast 대시보드에서 확인)"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "UpdateCharacterDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "에반"
+          },
+          "description": {
+            "type": "string"
+          },
+          "age": {
+            "type": "number",
+            "example": 17
+          },
+          "gender": {
+            "type": "string",
+            "example": "남성"
+          },
+          "personality": {
+            "type": "string"
+          },
+          "basePrompt": {
+            "type": "string",
+            "description": "이미지 생성용 기본 프롬프트"
+          },
+          "voiceType": {
+            "type": "string",
+            "description": "음성 타입 (OpenAI voice ID: alloy, ash, coral, echo, fable, nova, onyx, sage, shimmer)"
+          },
+          "elevenLabsVoiceType": {
+            "type": "string",
+            "description": "ElevenLabs 음성 타입 (adam, arnold, antoni, elli, domi, rachel, bella, josh, sam)",
+            "example": "rachel"
+          },
+          "typecastVoiceType": {
+            "type": "string",
+            "description": "Typecast actor_id (Typecast 대시보드에서 확인)"
+          }
+        }
+      },
+      "CreateCharacterReferenceDto": {
+        "type": "object",
+        "properties": {
+          "imageUrl": {
+            "type": "string",
+            "description": "이미지 URL"
+          },
+          "type": {
+            "type": "string",
+            "description": "레퍼런스 타입",
+            "example": "FRONT"
+          },
+          "prompt": {
+            "type": "string",
+            "description": "이미지 프롬프트"
+          }
+        },
+        "required": [
+          "imageUrl",
+          "type"
+        ]
+      },
+      "CreateAssetDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "BGM",
+              "SFX",
+              "BACKGROUND",
+              "OVERLAY",
+              "FONT"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "example": "배경음악 1"
+          },
+          "url": {
+            "type": "string",
+            "description": "S3/CDN URL"
+          },
+          "tags": {
+            "example": [
+              "action",
+              "intense"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "metadata": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "type",
+          "title",
+          "url"
+        ]
+      }
+    }
+  }
+}
