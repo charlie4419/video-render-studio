@@ -40,7 +40,7 @@ export function EpisodeWorkspace({ seriesId, episodeId }: Props) {
 
   const { data: videosData } = useVideos(episodeId);
   const videos = (videosData as unknown as FinalVideo[]) ?? [];
-  const latestVideo = videos[0];
+  const completedVideo = videos.find(v => v.status === 'COMPLETED' && v.videoUrl);
 
   const renderMutation = useRenderFinal(episodeId);
   const updateEpisodeMutation = useUpdateEpisode(episodeId, seriesId);
@@ -97,18 +97,19 @@ export function EpisodeWorkspace({ seriesId, episodeId }: Props) {
           )}
         </div>
 
-        {latestVideo?.status === 'COMPLETED' && latestVideo.videoUrl ? (
-          <a href={latestVideo.videoUrl} target="_blank" rel="noreferrer">
-            <Button size="sm" variant="outline" className="gap-1.5 h-9 shrink-0">
-              <ExternalLink className="h-3.5 w-3.5" /> 영상 보기
-            </Button>
-          </a>
-        ) : (
-          <Button size="sm" onClick={handleFinalRender} disabled={renderMutation.isPending} className="gap-1.5 h-9 shrink-0">
+        <div className="flex items-center gap-2 shrink-0">
+          {completedVideo && (
+            <a href={completedVideo.videoUrl ?? undefined} target="_blank" rel="noreferrer">
+              <Button size="sm" variant="outline" className="gap-1.5 h-9">
+                <ExternalLink className="h-3.5 w-3.5" /> 영상 보기
+              </Button>
+            </a>
+          )}
+          <Button size="sm" onClick={handleFinalRender} disabled={renderMutation.isPending} className="gap-1.5 h-9">
             <RefreshCw className={`h-3.5 w-3.5 ${renderMutation.isPending ? 'animate-spin' : ''}`} />
-            {renderMutation.isPending ? '처리중...' : '최종 렌더링'}
+            {renderMutation.isPending ? '처리중...' : completedVideo ? '재렌더링' : '최종 렌더링'}
           </Button>
-        )}
+        </div>
       </div>
 
       {/* 탭 */}

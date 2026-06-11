@@ -264,7 +264,17 @@ export const useSelectImage = (sceneId: string) => {
 
 // ── Videos ────────────────────────────────────────────────────
 export const useVideos = (episodeId: string) =>
-  useQuery({ queryKey: QK.videos(episodeId), queryFn: ({ signal }) => videosControllerFindByEpisode(episodeId, signal), enabled: !!episodeId });
+  useQuery({
+    queryKey: QK.videos(episodeId),
+    queryFn: ({ signal }) => videosControllerFindByEpisode(episodeId, signal),
+    enabled: !!episodeId,
+    refetchInterval: (query) => {
+      const videos = (query.state.data as unknown) as any[] | undefined;
+      if (!videos?.length) return 3000;
+      const hasActive = videos.some(v => v.status === 'PENDING' || v.status === 'PROCESSING' || v.status === 'RENDERING');
+      return hasActive ? 3000 : false;
+    },
+  });
 
 export const useRenderFinal = (episodeId: string) => {
   const qc = useQueryClient();
