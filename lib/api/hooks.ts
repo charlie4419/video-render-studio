@@ -11,6 +11,7 @@ import {
   episodesControllerFindBySeries,
   episodesControllerFindOne,
   episodesControllerCreate,
+  episodesControllerUpdate,
   episodesControllerRemove,
 } from './generated/episodes/episodes';
 import {
@@ -84,6 +85,17 @@ export const useCreateSeries = () => {
   });
 };
 
+export const useUpdateSeries = (id: string) => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (dto: Parameters<typeof seriesControllerUpdate>[1]) => seriesControllerUpdate(id, dto),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK.series() });
+      qc.invalidateQueries({ queryKey: QK.seriesOne(id) });
+    },
+  });
+};
+
 export const useDeleteSeries = () => {
   const qc = useQueryClient();
   return useMutation({
@@ -104,6 +116,17 @@ export const useCreateEpisode = (seriesId: string) => {
   return useMutation({
     mutationFn: (dto: Parameters<typeof episodesControllerCreate>[1]) => episodesControllerCreate(seriesId, dto),
     onSuccess: () => qc.invalidateQueries({ queryKey: QK.episodes(seriesId) }),
+  });
+};
+
+export const useUpdateEpisode = (episodeId: string, seriesId: string) => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (dto: Parameters<typeof episodesControllerUpdate>[1]) => episodesControllerUpdate(episodeId, dto),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: QK.episodeOne(episodeId) });
+      qc.invalidateQueries({ queryKey: QK.episodes(seriesId) });
+    },
   });
 };
 

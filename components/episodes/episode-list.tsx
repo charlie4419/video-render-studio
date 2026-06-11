@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Plus, Clapperboard, Trash2, ChevronRight, Users } from 'lucide-react';
+import { ArrowLeft, Plus, Clapperboard, Trash2, ChevronRight, Users, Settings } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -10,7 +10,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useSeriesOne, useEpisodeList, useCreateEpisode, useDeleteEpisode } from '@/lib/api/hooks';
+import { Textarea } from '@/components/ui/textarea';
+import { useSeriesOne, useEpisodeList, useCreateEpisode, useDeleteEpisode, useUpdateSeries } from '@/lib/api/hooks';
 import { CharacterPanel } from '@/components/characters/character-panel';
 import type { Series, Episode } from '@/lib/api/types';
 
@@ -29,15 +30,24 @@ interface Props { seriesId: string }
 export function EpisodeList({ seriesId }: Props) {
   const [openCreate, setOpenCreate] = useState(false);
   const [form, setForm] = useState({ title: '', episodeNumber: '' });
+  const [formatPrompt, setFormatPrompt] = useState('');
+  const [formatPromptLoaded, setFormatPromptLoaded] = useState(false);
 
   const { data: seriesData } = useSeriesOne(seriesId);
   const series = seriesData as unknown as Series;
+
+  // 설정 탭이 처음 렌더될 때 DB 값으로 초기화
+  if (series && !formatPromptLoaded) {
+    setFormatPrompt(series.formatPrompt ?? '');
+    setFormatPromptLoaded(true);
+  }
 
   const { data, isLoading } = useEpisodeList(seriesId);
   const episodes = (data as unknown as Episode[]) ?? [];
 
   const createMutation = useCreateEpisode(seriesId);
   const deleteMutation = useDeleteEpisode(seriesId);
+  const updateSeriesMutation = useUpdateSeries(seriesId);
 
   const handleCreate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -62,6 +72,15 @@ export function EpisodeList({ seriesId }: Props) {
       toast.success('삭제됐어요');
     } catch {
       toast.error('삭제 실패');
+    }
+  };
+
+  const handleSaveFormatPrompt = async () => {
+    try {
+      await updateSeriesMutation.mutateAsync({ formatPrompt });
+      toast.success('저장됐어요');
+    } catch {
+      toast.error('저장 실패');
     }
   };
 
@@ -97,6 +116,10 @@ export function EpisodeList({ seriesId }: Props) {
             <TabsTrigger value="characters" className="gap-1.5 text-sm">
               <Users className="h-3.5 w-3.5" />
               캐릭터
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="gap-1.5 text-sm">
+              <Settings className="h-3.5 w-3.5" />
+              설정
             </TabsTrigger>
           </TabsList>
           <Button size="sm" className="gap-1.5 h-9" onClick={() => setOpenCreate(true)}>
@@ -172,6 +195,25 @@ export function EpisodeList({ seriesId }: Props) {
 
         <TabsContent value="characters" className="mt-0">
           <CharacterPanel seriesId={seriesId} />
+        </TabsContent>
+
+        <TabsContent value="settings" className="mt-0">
+          <div className="max-w-2xl space-y-4">
+            <div className="space-y-1.5">
+              <Label>시리즈 제작 규칙 (AI 프롬프트)</Label>
+              <p className="text-xs text-muted-foreground">씬 생성 시 AI에게 전달되는 시리즈 전용 지시사항입니다.</p>
+              <Textarea
+                rows={12}
+                value={formatPrompt}
+                onChange={(e) => setFormatPrompt(e.target.value)}
+                placeholder="예: 씬 구성, 대사 원칙, 서사 흐름 등 시리즈에 특화된 AI 지시사항을 입력하세요."
+                className="font-mono text-sm"
+              />
+            </div>
+            <Button onClick={handleSaveFormatPrompt} disabled={updateSeriesMutation.isPending}>
+              {updateSeriesMutation.isPending ? '저장 중...' : '저장'}
+            </Button>
+          </div>
         </TabsContent>
       </Tabs>
 

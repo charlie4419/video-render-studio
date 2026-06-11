@@ -375,8 +375,9 @@ function CharacterForm({ draft, setDraft }: { draft: CharacterDraft; setDraft: (
         <Textarea className="text-xs min-h-[50px] resize-none" value={draft.description} onChange={set('description')} placeholder="캐릭터 설명" />
       </div>
       <div className="space-y-1">
-        <Label className="text-xs">성격</Label>
-        <Input className="text-xs h-8" value={draft.personality} onChange={set('personality')} placeholder="예: 밝고 활발한" />
+        <Label className="text-xs">역할 및 말투 <span className="text-muted-foreground font-normal">(스토리 생성에 사용)</span></Label>
+        <Textarea className="text-xs min-h-[70px] resize-none" value={draft.personality} onChange={set('personality')}
+          placeholder="예: 시공 하자를 꼼꼼히 발견하는 탐정. 단호하고 논리적인 말투로 증거 중심 설명." />
       </div>
       <div className="space-y-1">
         <Label className="text-xs">이미지 기본 프롬프트</Label>

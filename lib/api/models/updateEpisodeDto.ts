@@ -12,4 +12,5 @@ export interface UpdateEpisodeDto {
   description?: string;
   status?: UpdateEpisodeDtoStatus;
   thumbnail?: string;
+  extraPrompt?: string;
 }

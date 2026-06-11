@@ -10,5 +10,6 @@ export interface CreateSeriesDto {
   title: string;
   description?: string;
   stylePrompt?: string;
+  formatPrompt?: string;
   thumbnail?: string;
 }

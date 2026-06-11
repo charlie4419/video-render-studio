@@ -12,6 +12,7 @@ export interface Series {
   description: string | null;
   thumbnail: string | null;
   stylePrompt: string | null;
+  formatPrompt: string | null;
   createdBy: string | null;
   createdAt: string;
   updatedAt: string;
@@ -25,6 +26,7 @@ export interface Episode {
   episodeNumber: number;
   title: string;
   description: string | null;
+  extraPrompt: string | null;
   status: EpisodeStatus;
   thumbnail: string | null;
   finalVideoId: string | null;
@@ -179,12 +181,14 @@ export interface CreateSeriesDto {
   title: string;
   description?: string;
   stylePrompt?: string;
+  formatPrompt?: string;
 }
 
 export interface UpdateSeriesDto {
   title?: string;
   description?: string;
   stylePrompt?: string;
+  formatPrompt?: string;
   thumbnail?: string;
 }
 
@@ -198,6 +202,7 @@ export interface UpdateEpisodeDto {
   title?: string;
   description?: string;
   status?: EpisodeStatus;
+  extraPrompt?: string;
 }
 
 export interface GenerateScriptDto {

@@ -10,4 +10,5 @@ export interface CreateEpisodeDto {
   episodeNumber: number;
   title: string;
   description?: string;
+  extraPrompt?: string;
 }

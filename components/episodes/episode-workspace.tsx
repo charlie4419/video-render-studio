@@ -1,14 +1,17 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, RefreshCw, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { SceneList } from '@/components/scenes/scene-list';
 import { ScriptPanel } from '@/components/episodes/script-panel';
-import { useEpisodeOne, useVideos, useRenderFinal } from '@/lib/api/hooks';
+import { useEpisodeOne, useVideos, useRenderFinal, useUpdateEpisode } from '@/lib/api/hooks';
 import type { Episode, FinalVideo } from '@/lib/api/types';
 
 const STATUS: Record<string, { label: string; dot: string }> = {
@@ -27,11 +30,29 @@ export function EpisodeWorkspace({ seriesId, episodeId }: Props) {
   const { data, isLoading } = useEpisodeOne(episodeId);
   const episode = data as unknown as Episode;
 
+  const [extraPrompt, setExtraPrompt] = useState('');
+  const [extraPromptLoaded, setExtraPromptLoaded] = useState(false);
+
+  if (episode && !extraPromptLoaded) {
+    setExtraPrompt(episode.extraPrompt ?? '');
+    setExtraPromptLoaded(true);
+  }
+
   const { data: videosData } = useVideos(episodeId);
   const videos = (videosData as unknown as FinalVideo[]) ?? [];
   const latestVideo = videos[0];
 
   const renderMutation = useRenderFinal(episodeId);
+  const updateEpisodeMutation = useUpdateEpisode(episodeId, seriesId);
+
+  const handleSaveExtraPrompt = async () => {
+    try {
+      await updateEpisodeMutation.mutateAsync({ extraPrompt });
+      toast.success('저장됐어요');
+    } catch {
+      toast.error('저장 실패');
+    }
+  };
 
   const handleFinalRender = async () => {
     try {
@@ -95,12 +116,31 @@ export function EpisodeWorkspace({ seriesId, episodeId }: Props) {
         <TabsList className="h-9">
           <TabsTrigger value="scenes" className="text-sm">씬 목록</TabsTrigger>
           <TabsTrigger value="script" className="text-sm">대본</TabsTrigger>
+          <TabsTrigger value="settings" className="text-sm">설정</TabsTrigger>
         </TabsList>
         <TabsContent value="scenes" className="mt-5">
           <SceneList episodeId={episodeId} />
         </TabsContent>
         <TabsContent value="script" className="mt-5">
           <ScriptPanel episodeId={episodeId} />
+        </TabsContent>
+        <TabsContent value="settings" className="mt-5">
+          <div className="max-w-2xl space-y-4">
+            <div className="space-y-1.5">
+              <Label>에피소드 추가 지시사항 (AI 프롬프트)</Label>
+              <p className="text-xs text-muted-foreground">이 에피소드 전용 AI 지시사항입니다. 시리즈 규칙을 덮어쓰거나 보완합니다.</p>
+              <Textarea
+                rows={8}
+                value={extraPrompt}
+                onChange={(e) => setExtraPrompt(e.target.value)}
+                placeholder="예: 이번 화는 겨울 배경으로, 눈 내리는 장면을 포함해주세요."
+                className="font-mono text-sm"
+              />
+            </div>
+            <Button onClick={handleSaveExtraPrompt} disabled={updateEpisodeMutation.isPending}>
+              {updateEpisodeMutation.isPending ? '저장 중...' : '저장'}
+            </Button>
+          </div>
         </TabsContent>
       </Tabs>
     </div>
