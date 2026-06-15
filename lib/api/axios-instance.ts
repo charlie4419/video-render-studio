@@ -1,7 +1,7 @@
 import Axios, { AxiosRequestConfig } from 'axios';
 
 export const axiosClient = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000',
+  baseURL: process.env.NEXT_PUBLIC_API_URL ?? 'http://video.helloipju.com',
 });
 
 export const axiosInstance = <T>(config: AxiosRequestConfig): Promise<T> => {

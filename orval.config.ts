@@ -3,7 +3,7 @@ import { defineConfig } from 'orval';
 export default defineConfig({
   videoRender: {
     input: {
-      target: './swagger.json',
+      target: 'http://video.helloipju.com/docs-json',
     },
     output: {
       mode: 'tags-split',
